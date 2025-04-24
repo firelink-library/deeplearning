@@ -5,7 +5,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 const config: Config = {
-  title: 'Se não mudar, mamou',
+  title: 'Deep Learning',
   favicon: 'img/firelink.png',
 
   url: 'https://firelink-library.github.io',
@@ -70,7 +70,7 @@ const config: Config = {
           label: 'Tutorial',
         },
         {
-          href: 'https://github.com/firelink-library/docusaurus-template',
+          href: 'https://github.com/firelink-library/deeplearning',
           label: 'GitHub',
           position: 'right',
         },
