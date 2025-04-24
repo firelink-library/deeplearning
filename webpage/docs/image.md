@@ -4,7 +4,6 @@ slug: /image
 title: Imagens
 ---
 
-## Imagens
 
 Pessoal nosso objetivo aqui é compreender o que são imagens e como podemos manipular elas. Para isso, vamos descer um pouco mais a fundo no conceito de imagem.
 
