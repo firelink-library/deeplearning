@@ -9,7 +9,7 @@ const config: Config = {
   favicon: 'img/firelink.png',
 
   url: 'https://firelink-library.github.io',
-  baseUrl: '/docusaurus-template',
+  baseUrl: '/deeplearning',
 
   organizationName: 'Firelink Library',
   projectName: 'docusaurus-template',
@@ -70,7 +70,7 @@ const config: Config = {
           label: 'Tutorial',
         },
         {
-          href: 'https://github.com/firelink-library/docusaurus-template',
+          href: 'https://github.com/firelink-library/deeplearning',
           label: 'GitHub',
           position: 'right',
         },
