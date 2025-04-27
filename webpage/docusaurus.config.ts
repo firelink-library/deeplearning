@@ -5,7 +5,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
 const config: Config = {
-  title: 'Se não mudar, mamou',
+  title: 'Deep Learning',
   favicon: 'img/firelink.png',
 
   url: 'https://firelink-library.github.io',
