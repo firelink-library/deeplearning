@@ -459,6 +459,7 @@ O filtro de Canny é um operador de detecção de bordas que utiliza uma série 
 :::tip[O que é um operador de Canny?]
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sRFM5IEqR2w?si=hO1sZYlARQyqywrZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
 
 :::
 
@@ -504,6 +505,166 @@ Pontos importantes a serem observados:
 O objetivo da segmentação é dividir a imagem em regiões homogêneas, ou seja, regiões que possuem características semelhantes. A segmentação é uma etapa importante no processamento de imagens e visão computacional, pois permite extrair informações relevantes da imagem e facilitar a análise.
 
 A segmentação pode ser realizada utilizando diferentes técnicas, como segmentação por cor, segmentação por textura, segmentação por forma, entre outras. A escolha da técnica de segmentação depende do tipo de imagem e do objetivo da análise.
+
+:::tip[O que é segmentação?]
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/BA00xTv5-Z4?si=fTXF8sZexY0BU88Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+:::
+
+Vamos avaliar a implementação de um código para realizar a segmentação de uma imagem por thresholding. O thresholding é uma técnica de segmentação que utiliza um valor de limiar para dividir a imagem em duas regiões: uma região com intensidade de pixel acima do limiar e outra região com intensidade de pixel abaixo do limiar. Essa técnica é amplamente utilizada em processamento de imagens e visão computacional para segmentar objetos em imagens.
+
+```python showLineNumbers
+
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+# Aplica o filtro de Canny
+imagem_canny = cv2.Canny(imagem_gaussiana, 100, 200)
+# Aplica o thresholding
+_, imagem_threshold = cv2.threshold(imagem_canny, 127, 255, cv2.THRESH_BINARY)
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_threshold, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+
+```
+
+Pontos importantes a serem observados:
+1. O thresholding é aplicado utilizando a função `cv2.threshold`, que recebe como parâmetros a imagem, o valor do limiar (neste caso, 127), o valor máximo (neste caso, 255) e o tipo de thresholding (neste caso, `cv2.THRESH_BINARY`). O valor do limiar determina quais pixels serão considerados acima ou abaixo do limiar. Pixels com intensidade acima do limiar são definidos como 255 (branco) e pixels com intensidade abaixo do limiar são definidos como 0 (preto). Testar outros valores de limiar pode ser interessante para verificar o impacto na imagem.
+2. Existem outros tipos de thresholding, como o `cv2.THRESH_BINARY_INV`, que inverte os valores do thresholding binário, e o `cv2.THRESH_TRUNC`, que trunca os valores acima do limiar. Esses tipos de thresholding podem ser utilizados dependendo do tipo de imagem e do objetivo da análise.
+3. O thresholding é uma técnica de segmentação simples, mas eficaz, que pode ser utilizada para segmentar objetos em imagens. No entanto, ele pode ser sensível a ruídos e variações de iluminação na imagem. Para melhorar a qualidade da segmentação, é recomendável aplicar um filtro de suavização antes de aplicar o thresholding.
+4. O thresholding pode ser utilizado em conjunto com outras técnicas de segmentação, como a segmentação por cor e a segmentação por textura, para melhorar a qualidade da segmentação. Essas técnicas podem ser utilizadas para extrair informações relevantes da imagem e facilitar a análise.
+
+### 2.11 Encontrando Contornos
+
+Os contornos são linhas que delimitam a forma de um objeto em uma imagem. Eles são utilizados para representar a forma e a estrutura dos objetos na imagem. A detecção de contornos é uma etapa importante no processamento de imagens e visão computacional, pois permite extrair informações relevantes da imagem e facilitar a análise.
+
+A detecção de contornos pode ser realizada utilizando a função `cv2.findContours`, que recebe como parâmetros a imagem, o modo de detecção de contornos e o método de aproximação de contornos. O modo de detecção de contornos determina como os contornos serão detectados na imagem, enquanto o método de aproximação de contornos determina como os contornos serão aproximados.
+
+A função `cv2.findContours` retorna uma lista de contornos detectados na imagem, onde cada contorno é representado por um array de pontos que delimitam a forma do objeto. Esses contornos podem ser utilizados para extrair informações relevantes da imagem, como a área, o perímetro e a forma do objeto.
+
+Vamos verificar como encontrar os contornos na imagem utilizando o OpenCV.
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+# Aplica o filtro de Canny
+imagem_canny = cv2.Canny(imagem_gaussiana, 100, 200)
+# Aplica o thresholding
+_, imagem_threshold = cv2.threshold(imagem_canny, 127, 255, cv2.THRESH_BINARY)
+# Encontra os contornos
+contornos, _ = cv2.findContours(imagem_threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# Desenha os contornos na imagem original
+imagem_contornos = cv2.drawContours(imagem.copy(), contornos, -1, (0, 255, 0), 3)
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_contornos, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+
+1. A função `cv2.findContours` é utilizada para encontrar os contornos na imagem, recebendo como parâmetros a imagem, o modo de detecção de contornos (neste caso, `cv2.RETR_EXTERNAL`, que detecta apenas os contornos externos) e o método de aproximação de contornos (neste caso, `cv2.CHAIN_APPROX_SIMPLE`, que simplifica os contornos).
+2. A função `cv2.drawContours` é utilizada para desenhar os contornos na imagem original, recebendo como parâmetros a imagem, a lista de contornos, o índice do contorno (-1 para desenhar todos os contornos), a cor (neste caso, verde) e a espessura da linha (neste caso, 3).
+3. Os contornos detectados podem ser utilizados para extrair informações relevantes da imagem, como a área, o perímetro e a forma do objeto. Essas informações podem ser utilizadas para realizar tarefas de classificação e reconhecimento de objetos.
+
+## 3. Etapa de Extração de Características
+
+Legal, agora temos nossa imagem pré-processada e segmentada. A próxima etapa é a extração de características. A extração de características é uma etapa importante no processamento de imagens e visão computacional, pois permite extrair informações relevantes da imagem e facilitar a análise.
+
+A extração de características pode ser realizada utilizando diferentes técnicas, como extração de características de cor, textura e forma. A escolha da técnica de extração de características depende do tipo de imagem e do objetivo da análise. Ela podo acontecer com a imagem original ou com a imagem segmentada. A imagem segmentada pode conter informações mais relevantes para a tarefa de classificação, pois elimina informações desnecessárias da imagem original.
+
+Vamos avaliar um exemplo de extração de características utilizando o OpenCV:
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+# Aplica o filtro de Canny
+imagem_canny = cv2.Canny(imagem_gaussiana, 100, 200)
+# Aplica o thresholding
+_, imagem_threshold = cv2.threshold(imagem_canny, 127, 255, cv2.THRESH_BINARY)
+# Encontra os contornos
+contornos, _ = cv2.findContours(imagem_threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+# Remove os contornos pequenos
+contornos = [c for c in contornos if cv2.contourArea(c) > 100]
+
+# Desenha os contornos na imagem original
+imagem_contornos = cv2.drawContours(imagem.copy(), contornos, -1, (0, 255, 0), 3)
+# Calcula a área e o perímetro dos contornos
+for contorno in contornos:
+    area = cv2.contourArea(contorno)
+    perimetro = cv2.arcLength(contorno, True)
+    print(f'Área: {area}, Perímetro: {perimetro}')
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_contornos, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+1. A função `cv2.contourArea` é utilizada para calcular a área dos contornos, enquanto a função `cv2.arcLength` é utilizada para calcular o perímetro dos contornos. Essas informações podem ser utilizadas para realizar tarefas de classificação e reconhecimento de objetos.
+2. A área e o perímetro dos contornos são impressos no console, mas podem ser armazenados em uma lista ou array para serem utilizados posteriormente na análise.
+3. A extração de características pode ser realizada utilizando diferentes técnicas, como extração de características de cor, textura e forma. A escolha da técnica de extração de características depende do tipo de imagem e do objetivo da análise.
+4. A extração de características pode ser realizada em conjunto com outras técnicas de processamento de imagens, como a segmentação e a detecção de bordas, para melhorar a qualidade da análise. Essas técnicas podem ser utilizadas para extrair informações relevantes da imagem e facilitar a análise.
+
+
 
 
 
