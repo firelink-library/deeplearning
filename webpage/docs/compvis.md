@@ -210,6 +210,174 @@ Importante conhecer este conceito! Pipelines são sequências de etapas de proce
 
 :::
 
+### 2.4 Filtro de Média
+
+O filtro de média é um filtro linear que calcula a média dos valores dos pixels vizinhos e atribui esse valor ao pixel central. Isso resulta em um efeito de suavização na imagem, reduzindo o ruído e melhorando a qualidade da imagem. Vamos verificar como ele pode ser implementado utilizando o OpenCV.
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
+# Aplica o filtro de média
+imagem_media = cv2.blur(imagem_cinza, (5, 5))
+
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_cinza, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_media, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+
+```
+
+Pontos importantes a serem observados:
+
+1. Mesmo não sendo um filtro propriamente, a conversão da imagem para escala de cinza é uma etapa importante no pré-processamento de imagens. Isso porque, muitas vezes, as informações de cor não são relevantes para a tarefa de classificação e a conversão para escala de cinza reduz a complexidade da imagem.
+2. O filtro de média é aplicado utilizando a função `cv2.blur`, que recebe como parâmetros a imagem e o tamanho do kernel (neste caso, 5x5). O tamanho do kernel determina a quantidade de pixels vizinhos que serão considerados para calcular a média. Um kernel maior resulta em uma suavização mais intensa, enquanto um kernel menor resulta em uma suavização mais leve. Testar outros tamanhos de kernel pode ser interessante para verificar o impacto na imagem.
+3. A imagem original e a imagem filtrada são exibidas lado a lado utilizando o `matplotlib`. Isso facilita a comparação entre as duas imagens e permite visualizar o efeito do filtro de média. Para utilizar o `matplotlib`, é necessário importar a biblioteca e utilizar a função `plt.imshow` para exibir a imagem. O parâmetro `cmap='gray'` é utilizado para exibir a imagem em escala de cinza.
+
+### 2.5 Filtro Gaussiano
+
+O filtro gaussiano é um filtro linear que aplica uma função gaussiana aos pixels vizinhos, dando mais peso aos pixels mais próximos do pixel central. Isso resulta em um efeito de desfoque suave na imagem. Vamos verificar como ele pode ser implementado utilizando o OpenCV.
+
+:::tip[O que é uma função gaussiana?]
+
+Pessoal minha sugestão para compreender melhor o conceito da função gaussiana como um filtro. A função gaussiana é uma função matemática que descreve a distribuição normal de uma variável aleatória. Ela é caracterizada por sua forma de sino e é amplamente utilizada em estatística, processamento de sinais e aprendizado de máquina. A função gaussiana é definida pela seguinte equação:
+
+$$
+f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2\sigma^2}}
+$$
+
+Onde:
+- $$ f(x) $$: é o valor da função gaussiana para um determinado valor de \(x\).
+- $$ \mu $$: é a média da distribuição (o centro do sino).
+- $$ \sigma $$: é o desvio padrão da distribuição (a largura do sino).
+- $$ \e $$: é a base do logaritmo natural (aproximadamente 2.71828).
+- $$ \pi $$ : é a constante matemática pi (aproximadamente 3.14159).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Ud5f1P1lr8Q?si=nbm1a1S-S_xR3rj_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+
+
+:::
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_cinza, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+
+1. O filtro gaussiano é aplicado utilizando a função `cv2.GaussianBlur`, que recebe como parâmetros a imagem, o tamanho do kernel (neste caso, 5x5) e o desvio padrão da distribuição gaussiana (neste caso, 0). O tamanho do kernel e o desvio padrão determinam a quantidade de pixels vizinhos que serão considerados para calcular a média ponderada. Um kernel maior resulta em uma suavização mais intensa, enquanto um kernel menor resulta em uma suavização mais leve. Já o desvio padrão determina a largura do sino da função gaussiana. Um desvio padrão maior resulta em uma suavização mais intensa, enquanto um desvio padrão menor resulta em uma suavização mais leve.
+
+### 2.6 Filtro de Mediana
+
+O filtro de mediana é um filtro não linear que calcula a mediana dos valores dos pixels vizinhos e atribui esse valor ao pixel central. Isso resulta em um efeito de suavização que preserva as bordas da imagem. Vamos verificar como ele pode ser implementado utilizando o OpenCV.
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro de mediana
+imagem_mediana = cv2.medianBlur(imagem_cinza, 5)
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_cinza, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_mediana, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+
+1. O filtro de mediana é aplicado utilizando a função `cv2.medianBlur`, que recebe como parâmetros a imagem e o tamanho do kernel (neste caso, 5). O tamanho do kernel determina a quantidade de pixels vizinhos que serão considerados para calcular a mediana. Um kernel maior resulta em uma suavização mais intensa, enquanto um kernel menor resulta em uma suavização mais leve. Testar outros tamanhos de kernel pode ser interessante para verificar o impacto na imagem.
+
+2. O filtro de mediana é especialmente útil para remover ruídos impulsivos, como o ruído sal e pimenta, que podem afetar a qualidade da imagem. Ele preserva as bordas da imagem, o que é importante para tarefas de segmentação e extração de características.
+
+Aqui pessoal, já temos três filtros que podem ser utilizados para melhorar a qualidade das imagens. Vale destacar que o filtro de média e o filtro gaussiano são filtros lineares, enquanto o filtro de mediana é um filtro não linear. A escolha do filtro a ser utilizado depende do tipo de ruído presente na imagem e do efeito desejado. Como regra geral, o filtro de mediana é mais eficaz na remoção de ruídos impulsivos, enquanto os filtros de média e gaussiano são mais eficazes na suavização geral da imagem.
+
+Vale destacar que existem outros filtros que podem ser utilizados para melhorar a qualidade das imagens, como o filtro de Sobel, o filtro de Laplace, entre outros. Esses filtros são utilizados para detectar bordas e contornos na imagem e podem ser utilizados em conjunto com os filtros de média, gaussiano e mediana para melhorar ainda mais a qualidade da imagem.
+
+Agora vamos estudar alguns filtros que podem ser utilizados para detectar bordas e contornos na imagem. Esses filtros são utilizados para destacar as bordas e contornos da imagem, o que pode ser útil para tarefas de segmentação e extração de características.
+
+### 2.7 Conceito de Gradiente
+
+O gradiente é uma medida da variação de intensidade de uma imagem em relação a uma direção específica. Ele é utilizado para detectar bordas e contornos na imagem, pois as bordas são regiões onde há uma mudança abrupta na intensidade dos pixels. O gradiente é calculado utilizando operadores de derivada, como o operador Sobel, o operador Prewitt e o operador Laplace.
+
+:::tip[O que é um gradiente?]
+
+Pessoal aqui tem uma definição mais formal do que é um gradiente. O gradiente de uma função escalar \(f(x, y)\) em duas dimensões é um vetor que aponta na direção da maior taxa de variação da função e tem magnitude igual à taxa de variação máxima. Eu sei que não é uma leitura fácil, aqui é o ponto de ver um vídeo pesado de conceito, mas vale a pena colocar energia para compreender o conceito. 
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Dl5lPdoCXi8?si=CyXRbkRvDJ6Y3s88" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lOEBsQodtEQ?si=7nuvFcbnPIoAevXn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+:::
+
+
+
+
 ---
 
 :::warning[ATENÇÃO]
