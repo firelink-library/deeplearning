@@ -210,3 +210,23 @@ Importante conhecer este conceito! Pipelines são sequências de etapas de proce
 
 :::
 
+---
+
+:::warning[ATENÇÃO]
+
+Pessoal eu vou terminar ainda de curar o material. Por hora, peço que vocês verifiquem esse material de estudo nas referências.
+Obrigado!
+
+:::
+
+## x. Referências
+
+- Playlist de pré-processamento: https://www.youtube.com/watch?v=vqRzOGg9mi8&list=PL2zRqk16wsdorCSZ5GWZQr1EMWXs2TDeu
+
+- https://www.youtube.com/watch?v=ZSqg-fZJ9tQ
+
+- https://www.youtube.com/watch?v=KkM5skOXZYQ
+
+- https://www.youtube.com/watch?v=88HdqNDQsEk&list=PLqyxJaY2tD7hRV3atvl2LzKz6eWXcq_hi
+
+- https://docs.opencv.org/3.4/dc/d88/tutorial_traincascade.html
