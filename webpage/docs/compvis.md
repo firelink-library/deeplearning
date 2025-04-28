@@ -254,6 +254,14 @@ Pontos importantes a serem observados:
 2. O filtro de média é aplicado utilizando a função `cv2.blur`, que recebe como parâmetros a imagem e o tamanho do kernel (neste caso, 5x5). O tamanho do kernel determina a quantidade de pixels vizinhos que serão considerados para calcular a média. Um kernel maior resulta em uma suavização mais intensa, enquanto um kernel menor resulta em uma suavização mais leve. Testar outros tamanhos de kernel pode ser interessante para verificar o impacto na imagem.
 3. A imagem original e a imagem filtrada são exibidas lado a lado utilizando o `matplotlib`. Isso facilita a comparação entre as duas imagens e permite visualizar o efeito do filtro de média. Para utilizar o `matplotlib`, é necessário importar a biblioteca e utilizar a função `plt.imshow` para exibir a imagem. O parâmetro `cmap='gray'` é utilizado para exibir a imagem em escala de cinza.
 
+
+:::tip[O que é um filtro de média?]
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/C_zFhWdM4ic?si=M2bbPh4KwTMW6iWO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+:::
+
 ### 2.5 Filtro Gaussiano
 
 O filtro gaussiano é um filtro linear que aplica uma função gaussiana aos pixels vizinhos, dando mais peso aos pixels mais próximos do pixel central. Isso resulta em um efeito de desfoque suave na imagem. Vamos verificar como ele pode ser implementado utilizando o OpenCV.
@@ -274,7 +282,7 @@ Onde:
 - $$ \pi $$ : é a constante matemática pi (aproximadamente 3.14159).
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Ud5f1P1lr8Q?si=nbm1a1S-S_xR3rj_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
-
+<br />
 
 :::
 
@@ -374,6 +382,128 @@ Pessoal aqui tem uma definição mais formal do que é um gradiente. O gradiente
 <br />
 
 :::
+
+Agora vamos aplicar esses filtros para verificar como eles detectam bordas e contornos na imagem.
+
+### 2.8 Filtro de Sobel
+
+O filtro de Sobel é um operador de derivada que calcula o gradiente da imagem em duas direções: horizontal e vertical. Ele é utilizado para detectar bordas e contornos na imagem. Algumas características do filtro de Sobel:
+
+- O filtro de Sobel é um operador de derivada que calcula o gradiente da imagem em duas direções: horizontal e vertical.
+- Ele utiliza duas matrizes de convolução (kernels) para calcular o gradiente: uma para a direção horizontal e outra para a direção vertical.
+- O filtro de Sobel é mais sensível a bordas diagonais do que o filtro de Prewitt, o que pode ser útil em algumas aplicações.
+- O filtro de Sobel é amplamente utilizado em processamento de imagens e visão computacional para detectar bordas e contornos. Contudo, ele não é aplicado em imagens coloridas, apenas em imagens em escala de cinza.
+- O filtro de Sobel é utilizado em conjunto com outros filtros, como o filtro gaussiano, para melhorar a qualidade da imagem antes de aplicar o filtro de Sobel. Isso ajuda a reduzir o ruído e melhorar a detecção de bordas. Ele é um filtro bastante sensível a ruídos, portanto, é importante aplicar um filtro de suavização antes de aplicar o filtro de Sobel.
+
+:::tip[O que é um operador de Sobel?]
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uihBwtPIBxM?si=ETdy8nnpaX_ZADnm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+:::
+
+Vamos verificar como ele pode ser implementado utilizando o OpenCV.
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+# Aplica o filtro de Sobel
+sobel_x = cv2.Sobel(imagem_gaussiana, cv2.CV_64F, 1, 0, ksize=5)
+sobel_y = cv2.Sobel(imagem_gaussiana, cv2.CV_64F, 0, 1, ksize=5)
+# Calcula a magnitude do gradiente
+magnitude = np.sqrt(sobel_x**2 + sobel_y**2)
+# Normaliza a magnitude do gradiente
+magnitude = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(magnitude, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+
+1. O filtro de Sobel é aplicado utilizando a função `cv2.Sobel`, que recebe como parâmetros a imagem, o tipo de dado da imagem (neste caso, `cv2.CV_64F`), as derivadas em relação às direções x e y (neste caso, 1 e 0 para a direção x e 0 e 1 para a direção y) e o tamanho do kernel (neste caso, 5). O tamanho do kernel determina a quantidade de pixels vizinhos que serão considerados para calcular o gradiente. Um kernel maior resulta em uma detecção de bordas mais intensa, enquanto um kernel menor resulta em uma detecção de bordas mais leve. Testar outros tamanhos de kernel pode ser interessante para verificar o impacto na imagem.
+2. A magnitude do gradiente é calculada utilizando a fórmula da raiz quadrada da soma dos quadrados das derivadas em relação às direções x e y. Isso resulta em uma imagem que representa a intensidade do gradiente em cada pixel.
+3. A magnitude do gradiente é normalizada utilizando a função `cv2.normalize`, que recebe como parâmetros a imagem, o valor mínimo e máximo da normalização e o tipo de normalização (neste caso, `cv2.NORM_MINMAX`). Isso resulta em uma imagem que representa a intensidade do gradiente em cada pixel, com valores entre 0 e 255.
+
+### 2.9 Filtro de Canny
+
+O filtro de Canny é um operador de detecção de bordas que utiliza uma série de etapas para detectar bordas na imagem. Ele é utilizado em processamento de imagens e visão computacional para detectar bordas e contornos, devolvendo para nós a localização das bordas e não focando em sua dimensão (o quão espessa é uma borda, por exemplo). Algumas características do filtro de Canny:
+
+- O filtro de Canny é um operador de detecção de bordas que utiliza uma série de etapas para detectar bordas na imagem.
+- Ele utiliza um filtro gaussiano para suavizar a imagem e reduzir o ruído.
+- Utiliza o operador de Sobel para calcular o gradiente da imagem em duas direções: horizontal e vertical.
+- Ele utiliza a supressão de não-máximos para eliminar pixels que não são bordas.
+- Utiliza a histerese para conectar bordas fracas a bordas fortes.
+- Utilizado em processamento de imagens e visão computacional para detectar bordas e contornos. Ele é um filtro bastante sensível a ruídos, portanto, é importante aplicar um filtro de suavização antes de aplicar o filtro de Canny. O filtro gaussiano é o mais utilizado para suavizar a imagem antes de aplicar o filtro de Canny.
+
+:::tip[O que é um operador de Canny?]
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sRFM5IEqR2w?si=hO1sZYlARQyqywrZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+
+:::
+
+Vamos a sua implementação utilizando o OpenCV.
+
+```python showLineNumbers
+import cv2
+import matplotlib.pyplot as plt
+import os
+import numpy as np
+
+# Definindo o caminho para as imagens
+caminho_imagens = 'imagens/tampinhas_01.jpeg'
+# Abre a imagem
+imagem = cv2.imread(caminho_imagens)
+# Redimensiona a imagem
+imagem = cv2.resize(imagem, (512, 512))
+# Converte a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Aplica o filtro gaussiano
+imagem_gaussiana = cv2.GaussianBlur(imagem_cinza, (5, 5), 0)
+# Aplica o filtro de Canny
+imagem_canny = cv2.Canny(imagem_gaussiana, 100, 200)
+# Exibe a imagem original e a imagem filtrada
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_gaussiana, cmap='gray')
+plt.title('Imagem Original')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_canny, cmap='gray')
+plt.title('Imagem Filtrada')
+plt.axis('off')
+plt.show()
+```
+
+Pontos importantes a serem observados:
+
+1. O filtro de Canny é aplicado utilizando a função `cv2.Canny`, que recebe como parâmetros a imagem, os limites inferior e superior para a histerese (neste caso, 100 e 200). Os limites inferior e superior determinam quais bordas serão consideradas fortes e fracas. Bordas fortes são aquelas que têm uma intensidade de gradiente maior que o limite superior, enquanto bordas fracas são aquelas que têm uma intensidade de gradiente menor que o limite inferior. Bordas fracas que estão conectadas a bordas fortes são consideradas bordas válidas.
+2. O filtro de Canny é um filtro bastante sensível a ruídos, portanto, é importante aplicar um filtro de suavização antes de aplicar o filtro de Canny. O filtro gaussiano é o mais utilizado para suavizar a imagem antes de aplicar o filtro de Canny.
+
+### 2.10 Operação de Segmentação
+
+O objetivo da segmentação é dividir a imagem em regiões homogêneas, ou seja, regiões que possuem características semelhantes. A segmentação é uma etapa importante no processamento de imagens e visão computacional, pois permite extrair informações relevantes da imagem e facilitar a análise.
+
+A segmentação pode ser realizada utilizando diferentes técnicas, como segmentação por cor, segmentação por textura, segmentação por forma, entre outras. A escolha da técnica de segmentação depende do tipo de imagem e do objetivo da análise.
 
 
 
