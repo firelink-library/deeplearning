@@ -57,7 +57,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'Template docusaurus',
+      title: 'Deep Learning',
       logo: {
         alt: 'Logo Firelink Lib.',
         src: 'img/firelink.png',
@@ -67,7 +67,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Material',
         },
         {
           href: 'https://github.com/firelink-library/deeplearning',
