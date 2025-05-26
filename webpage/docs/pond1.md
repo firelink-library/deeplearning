@@ -1,7 +1,7 @@
 ---
 sidebar_position: 11
 slug: /pond1
-title: Atividade Visualizador de Imagens
+title: Visualizador de imagens
 ---
 
 Este projeto tem por objetivo construir um visualizador de imagens, que permita ao usuário aplicar diferentes filtros e transformações em uma imagem escolhida pelo usuário. O carregamento da imagem deve ser realizado pelo usuário, e o visualizador deve permitir a aplicação de filtros como escala de cinza, inversão de cores, entre outros. Além disso, o visualizador deve permitir a aplicação de transformações como rotação e redimensionamento da imagem.

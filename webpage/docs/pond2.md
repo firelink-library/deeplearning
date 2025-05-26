@@ -1,7 +1,7 @@
 ---
 sidebar_position: 12
 slug: /pond2
-title: Atividade Classificador Customizado de Imagens
+title: Classificador de imagens
 ---
 
 Este projeto tem por objetivo construir um visualizador de imagens que permita a aplicação de um classificador customizado treinado pelo desenvolvedor. As imagens devem ser exibidas da webcam do usuário ou de um arquivo local, e o classificador deve ser capaz de identificar e classificar as imagens em diferentes categorias.
