@@ -1,9 +1,8 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 slug: /image
 title: Imagens
 ---
-
 
 Pessoal nosso objetivo aqui é compreender o que são imagens e como podemos manipular elas. Para isso, vamos descer um pouco mais a fundo no conceito de imagem.
 

@@ -1,9 +1,8 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 slug: /compvis
-title: Algoritmos de Visão Computacional Clássica
+title: Visão computacional clássica
 ---
-
 
 ## 1. Introdução a Visão Computacional Clássica
 
