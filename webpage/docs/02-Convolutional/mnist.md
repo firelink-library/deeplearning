@@ -25,6 +25,7 @@ o dataset MNIST.
         allowFullScreen>
     </iframe>
 </div>
+<br/>
 
 :::tip Exercício
 
