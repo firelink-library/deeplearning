@@ -90,7 +90,6 @@ Algoritmo Perceptron (pseudocódigo):
      2. `y_hat = step(z)`
      3. `erro = y - y_hat`
      4. Atualize:
-
         * `w1 += eta * erro * x1`
         * `w2 += eta * erro * x2`
         * `w0 += eta * erro`  (bias)
