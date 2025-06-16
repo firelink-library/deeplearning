@@ -36,3 +36,122 @@ Apresentar no README do projeto uma breve descrição do classificador, incluind
     - O visualizador deve ter uma interface amigável e intuitiva, com botões e menus claros para a exibição do resultado do classificador.
     - O visualizador deve ser testado com diferentes imagens para garantir que o classificador funciona corretamente.
     - Todo o projeto deve ser entregue em um repositório do GitHub, com um README claro e conciso, explicando como executar o projeto e suas funcionalidades.
+
+
+---
+
+## Alternativa
+
+Para quem ainda não implementou a atividade ponderada acima, você podem fazer essa implementação de exercício:
+
+**Exercício: Implementação de uma Calculadora em Notação Polonesa Reversa (RPN)**
+
+---
+
+### 1. Contexto
+
+A **Notação Polonesa Reversa** (RPN – *Reverse Polish Notation*), também chamada de **postfix**, é uma forma de representar expressões matemáticas em que o operador vem **após** seus operandos. Por exemplo, a expressão infixa
+
+```
+(3 + 4) × 5
+```
+
+em RPN fica:
+
+```
+3 4 + 5 ×
+```
+
+Esse formato elimina a necessidade de parênteses e facilita a avaliação de expressões usando uma **pilha**:
+
+1. Ao ler um número, empilha-o.
+2. Ao ler um operador, desempilha os dois últimos números, aplica a operação e empilha o resultado.
+
+Calculadoras da HP e muitas linguagens de script usam RPN por sua eficiência.
+
+:::tip[Notação Polonesa Reversa]
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7ha78yWRDlE?si=fGqZyMKWrRs4hu6M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style={{marginLeft:'auto', marginRight:'auto', display:'block', width:'60%'}}></iframe>
+<br />
+
+:::
+
+---
+
+### 2. Objetivo
+
+Desenvolver, em linguagem C (ou pseudocódigo), uma **calculadora** que:
+
+1. **Leia** uma expressão em RPN (como uma sequência de tokens separados por espaço).
+2. **Utilize** uma implementação de **pilha** para armazenar operandos.
+3. **Avalie** a expressão e **imprima** o resultado numérico.
+
+---
+
+### 3. Descrição da Atividade
+
+1. **Implementar o TAD Pilha**
+
+   * Operações mínimas:
+
+     * `inicializaPilha()`
+     * `push(pilha, valor)`
+     * `valor = pop(pilha)`
+     * `estaVazia(pilha)`
+
+2. **Leitura e Tokenização**
+
+   * Leia uma linha de texto representando a expressão RPN (por exemplo: `"5 1 2 + 4 * + 3 –"`).
+   * Separe-a em tokens (números ou operadores).
+
+3. **Avaliação da Expressão**
+
+   * Para cada token:
+
+     * Se for número: `push(pilha, número)`.
+     * Se for operador (`+`, `-`, `*`, `/`):
+
+       1. `b = pop(pilha)`
+       2. `a = pop(pilha)`
+       3. `res = a operador b`
+       4. `push(pilha, res)`
+
+4. **Resultado Final**
+
+   * Ao final da leitura, o topo da pilha deve conter o resultado da expressão.
+   * Imprima-o na saída padrão.
+
+---
+
+### 4. Requisitos Mínimos
+
+* Suporte a operações básicas:
+
+  * **Adição** (`+`), **Subtração** (`-`), **Multiplicação** (`*`), **Divisão** (`/`).
+* Tratamento de **expressões bem formadas**; não é necessário lidar com erros de sintaxe (mas pode ser considerado um **desafio extra**).
+* Utilizar exclusivamente o TAD Pilha para manipulação de operandos.
+
+---
+
+### 5. Exemplos de Uso
+
+| Expressão RPN       | Avaliação passo a passo                                                                                     | Resultado |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------- |
+| `3 4 +`             | push 3; push 4; pop b=4, a=3; push (3+4)=7                                                                  | 7         |
+| `5 1 2 + 4 * + 3 -` | …  → push(5); push(1); push(2); → pop2,1→3; push3; push4; pop4,3→12; push12; pop12,5→17; push17; pop3,17→14 | 14        |
+
+---
+
+### 6. Critérios de Avaliação
+
+1. **Correta implementação** das operações de pilha.
+2. **Leitura e tokenização** eficiente da expressão.
+3. **Avaliação correta** de várias expressões RPN.
+4. **Clareza do código**: uso de funções, comentários e tratamento de casos especiais (desafios).
+
+---
+
+Entregar o link para o repositório com a solução. No **readme**, explicar como foi realizada a implementação do algoritmo.
+
+
+
